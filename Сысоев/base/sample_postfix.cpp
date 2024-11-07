@@ -1,24 +1,31 @@
-﻿#include <iostream>
+#include <iostream>
 #include <string>
+#include <map>
 #include "postfix.h"
 
 using namespace std;
 
 int main()
 {
-  string expression;
-  TPostfix postfix;
-  double res;
+	string expression;
+	double res;
+	double val;
 
-  setlocale(LC_ALL, "Russian");
-  //cout << "Введите арифметическое выражение: ";
-  //cin >> expression;
-  //cout << expression << endl;
-  cout << "Арифметическое выражение: " << postfix.GetInfix() << endl;
-  postfix.ToPostfix();
-  cout << "Постфиксная форма: " << postfix.GetPostfix() << endl;
-  res = postfix.Calculate();
-  cout << res << endl;
+	cout << "Enter expression: ";
+	cin >> expression;
+	TPostfix postfix(expression);
+	cout << postfix.GetInfix() << endl;
+	cout << postfix.GetPostfix() << endl;
+	vector<string> operands = postfix.GetOperands();
+	map<string, double> values;
+	for (const auto& op : operands)
+	{
+		cout << "Enter value of " << op << ": ";
+		cin >> val;
+		values[op] = val;
+	}
+	res = postfix.Calculate(values);
+	cout << res << endl;
 
-  return 0;
+	return 0;
 }
