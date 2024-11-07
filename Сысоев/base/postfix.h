@@ -1,24 +1,43 @@
-﻿#ifndef __POSTFIX_H__
+#ifndef __POSTFIX_H__
 #define __POSTFIX_H__
 
 #include <string>
+#include <vector>
+#include <map>
 #include "stack.h"
-
-using namespace std;
 
 class TPostfix
 {
-  string infix;
-  string postfix;
+private:
+    string infix; // инфиксное выражение
+    string postfix;  // постфиксное выражение
+    vector<char> lexems;
+    map<char, int> priority; 
+    map<string, double> operands; // ключи могут быть не только сhar, но и string
+
+    void Parse();
+    void ToPostfix();
+
 public:
-  TPostfix()
-  {
-    infix = "a + b";
-  }
-  string GetInfix() { return infix; }
-  string GetPostfix() { return postfix; }
-  string ToPostfix();
-  double Calculate(); // Ввод переменных, вычисление по постфиксной форме
+    TPostfix(string infix_) : infix(infix_) // конструктор-инициализатор
+    {
+        priority = { {'(', 0}, {')', 0}, {'-', 1}, {'+', 1}, {'*', 2}, {'/', 2}, {'_', 3} };
+        ToPostfix();
+    }
+
+    string GetInfix() const noexcept
+    {
+        return infix;
+    }
+
+    string GetPostfix() const noexcept
+    {
+        return postfix;
+    }
+
+    vector<string> GetOperands() const;
+    double Calculate(const map<string, double>& values);
 };
 
 #endif
+
